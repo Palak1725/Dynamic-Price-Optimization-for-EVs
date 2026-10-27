@@ -75,7 +75,7 @@ Q12: How is the Implied Charging Rate (charging_rate_kw) calculated?
 
 Answer: The average power drawn during active charging:
 
-   $$\text{Charging Rate (kW)} = \frac{\text{kWhDelivered}}{\text{active\charging\minutes} / 60}$$
+   $$\text{Charging Rate (kW)} = \frac{\text{kWhDelivered}}{\text{active\_charging\_minutes} / 60}$$
 
 Q13: Why did we clip active_charging_minutes to a minimum of 3.0 minutes?
 
