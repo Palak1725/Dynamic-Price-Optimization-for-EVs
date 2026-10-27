@@ -50,24 +50,31 @@ Answer:DST (Daylight Saving Time): The practice of advancing clocks by 1 hour du
 Q9: What is Total Session Duration, and how is it calculated?
 
 Answer: The total duration a vehicle occupies a charging stall:
+
    $$\text{Session Duration (mins)} = \frac{\text{disconnectTime} - \text{connectionTime}}{60}$$
+   
 It measures physical parking congestion and stall availability.   
 
 Q10: What is Idle Duration, and why is it called "stall blocking"?
 
 Answer: The time an EV remains plugged in after its battery is full (zero power draw):
+
    $$\text{Idle Duration (mins)} = \frac{\text{disconnectTime} - \text{doneChargingTime}}{60}$$
+   
 It identifies "stall blocking," where fully charged cars prevent other drivers from using the charger.  
 
 Q11: What is Active Charging Duration, and why is it calculated separately?
 
 Answer: The exact duration power is actively flowing into the vehicle:
+
    $$\text{Active Duration (mins)} = \frac{\text{doneChargingTime} - \text{connectionTime}}{60}$$
+   
 Separating active time from idle time prevents phantom load errors—ensuring the grid model does not assume a vehicle is drawing power during its entire 8-hour parking stay.   
 
 Q12: How is the Implied Charging Rate (charging_rate_kw) calculated?
 
 Answer: The average power drawn during active charging:
+
    $$\text{Charging Rate (kW)} = \frac{\text{kWhDelivered}}{\text{active\_charging\_minutes} / 60}$$
 
 Q13: Why did we clip active_charging_minutes to a minimum of 3.0 minutes?
