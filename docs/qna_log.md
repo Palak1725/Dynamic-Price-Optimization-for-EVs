@@ -252,3 +252,32 @@ named_states = rank[raw_states]  # 0: Surplus, 1: Nominal, 2: Peak Stress[cite: 
   1. **Bug-Free Dataset:** The QA audit certifies that `hourly_features_with_states.csv` is mathematically and physically validated[cite: 5].
   2. **Reliable Price Triggers:** Sorted states provide deterministic pricing actions (State 0 = surplus discount, State 1 = baseline SCE rate, State 2 = peak surcharge)[cite: 5].
   3. **Risk Adjustments:** The verified transition matrix provides transition probabilities ($P_{ij}$) used by Phase 4 optimization algorithms to anticipate upcoming grid stress.
+
+
+---
+
+## Phase 4: HMM Model Selection and Training
+
+### Q1: AIC/BIC were lowest at K = 5, but the project uses K = 3. Why?
+- **Raised by:** Pritikona patra
+- Answer: AIC and BIC decreased continuously from K = 2 to K = 5 (BIC: -57847, -70122, -73728, -76081). The largest improvement occurs between K = 2 and K = 3, and gains shrink afterwards (the "elbow"). The dataset has many hours with exactly zero load, which lets extra states keep fitting small clusters, and consecutive hourly values are not independent, so BIC tends to favour more states. K = 3 was chosen because it matches the three operating regimes (Surplus, Nominal, Peak Stress) that the pricing phase needs, with one elasticity value per regime.
+
+### Q2: The parameter-count formula on the task sheet gives a different number from the standard count. Which was used?
+- **Raised by:** Pritikona patra
+- Answer: The sheet's general formula is p = (K-1) + K(K-1) + K·D + K·D(D+1)/2. For D = 2 this simplifies to K² + 5K - 1 (23 for K = 3), but the sheet states K² + 4K - 1 (20 for K = 3). The general formula was used in the code. Both values are saved in aic_bic_results.csv (columns p and p_sheet) for comparison.
+
+### Q3: The model printed "Model is not converging" during training. Is this a problem?
+- **Raised by:** Pritikona patra
+- Answer: The warning appeared when training K = 5. The log-likelihood decreased by about 0.05 in one iteration, which is negligible (the total is about 38263). It is a common numerical effect with EM on data containing many identical values. The results were stable, and random_state = 42 makes them reproducible.
+
+### Q4: HMM state numbers (0, 1, 2) are arbitrary. How are Surplus, Nominal and Peak Stress identified?
+- **Raised by:** Pritikona patra
+- Answer: hmmlearn assigns state numbers randomly, so state 0 is not necessarily the quietest. The states are sorted by their mean transformer_load_ratio: lowest = Surplus, middle = Nominal, highest = Peak Stress. The output file contains raw_state (original numbers), state (0/1/2 after sorting) and state_name.
+
+### Q5: The Peak Stress state has a low transformer load (mean about 0.17). Is the transformer really under stress?
+- **Raised by:** Pritikona patra
+- Answer: No. "Peak Stress" is a relative label meaning the busiest regime for this station. The mean load ratio in that state is about 0.17, and the maximum in the whole year is about 0.68, so the 150 kW capacity is never reached. This matters for the pricing phase: an overload penalty based on C_safe will rarely activate unless C_safe is set lower or the transformer capacity is reduced in the stress test.
+
+### Q6: Were the features scaled, and was the data split into train and test sets?
+- **Raised by:** Pritikona patra
+- Answer: The task sheet used the two raw features (occupancy_rate and transformer_load_ratio, both roughly 0 to 1) and fitted the HMM on all 8,760 hours, so no scaling or split was applied in this phase. Model selection therefore uses in-sample likelihood, which favours more states. A time-based split (for example 70/15/15) with a scaler fitted only on training data could be added later if the team wants out-of-sample validation.
