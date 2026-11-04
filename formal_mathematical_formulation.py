@@ -7,6 +7,144 @@ Original file is located at
     https://colab.research.google.com/drive/17M8iSp5zgaK7RiCJCfW3rgvxIecqYJXU
 """
 
+"""
+============================================================
+PHASE 4.1: FORMAL MATHEMATICAL FORMULATION
+Dynamic Price Optimization for Electric Vehicle Technology
+============================================================
+
+1. HIDDEN OPERATING STATES
+------------------------------------------------------------
+The EV charging infrastructure is represented using three
+hidden operating states:
+
+S1: Renewable Surplus / Low Load Regime
+    - Low charger occupancy.
+    - Low transformer load.
+    - Represents a low-demand operating condition.
+
+S2: Nominal Operating Regime
+    - Moderate charger occupancy.
+    - Moderate transformer load.
+    - Represents normal operating conditions.
+
+S3: Peak Grid Stress Regime
+    - High charger occupancy.
+    - High transformer load.
+    - Represents a high-demand and potentially stressed
+      operating condition.
+
+The hidden state at time t is:
+
+    q_t ∈ {S1, S2, S3}
+
+
+2. OBSERVATION VECTOR
+------------------------------------------------------------
+The observation vector contains two measurable features:
+
+    o_t = [occupancy_rate, transformer_load_ratio]^T
+
+Where:
+    occupancy_rate       = EV charger occupancy rate
+    transformer_load_ratio = Transformer loading ratio
+
+The model uses these observations to identify the
+underlying operating state.
+
+
+3. INITIAL STATE PROBABILITIES
+------------------------------------------------------------
+The initial probability represents the probability that
+the system starts in a particular hidden state.
+
+    π_i = P(q_1 = S_i)
+
+Where:
+    π_i = Initial probability of state S_i
+
+The probabilities satisfy:
+
+    Σ π_i = 1
+
+
+4. STATE TRANSITION MATRIX
+------------------------------------------------------------
+The transition matrix represents the probability of
+moving from one operating state to another.
+
+    A_ij = P(q_(t+1) = S_j | q_t = S_i)
+
+Where:
+    A_ij = Probability of transition from state S_i
+           to state S_j.
+
+Each row of the transition matrix must sum to 1:
+
+    Σ_j A_ij = 1
+
+
+5. GAUSSIAN EMISSION PROBABILITY
+------------------------------------------------------------
+The observation probability for each hidden state is
+modelled using a multivariate Gaussian distribution.
+
+    b_j(o_t) = P(o_t | q_t = S_j)
+
+    b_j(o_t) = N(o_t; μ_j, Σ_j)
+
+Where:
+    μ_j     = Mean observation vector for state S_j
+    Σ_j     = Covariance matrix for state S_j
+    o_t     = Observation vector at time t
+
+The Gaussian emission model helps identify the operating
+regime based on charger occupancy and transformer load.
+
+
+6. HMM MODEL CONFIGURATION
+------------------------------------------------------------
+Model: Gaussian Hidden Markov Model (Gaussian HMM)
+
+Number of hidden states: 3
+
+Observation features:
+    1. occupancy_rate
+    2. transformer_load_ratio
+
+Covariance type: Full
+
+Training iterations: 200
+
+Random state: 42
+
+
+7. STATE DECODING
+------------------------------------------------------------
+The Viterbi algorithm is used to estimate the most likely
+sequence of hidden operating states from the observations.
+
+The decoded states are ordered according to their average
+transformer load:
+
+    State 0 -> Surplus
+    State 1 -> Nominal
+    State 2 -> Peak Stress
+
+
+NOTE:
+Renewable energy generation and charging queue lengths
+are not directly measured in the current dataset.
+Therefore, the three state names represent operating-regime
+interpretations based on the available observation features.
+
+============================================================
+END OF MATHEMATICAL FORMULATION
+============================================================
+"""
+
+# YOUR EXISTING PYTHON CODE STARTS BELOW
+
 !pip install hmmlearn
 
 import pandas as pd
