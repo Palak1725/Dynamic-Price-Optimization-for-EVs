@@ -1,5 +1,7 @@
 Architecture — Dynamic Price Optimization of EV Charging
+
 1. Project Overview
+   
 Project Name: Dynamic Price Optimization of EV Charging
 Domain: Artificial Intelligence, Machine Learning and Data Science
 Primary Dataset: Caltech ACN-Data (Adaptive Charging Network)
@@ -13,7 +15,7 @@ The project consists of five major phases:
 	Hidden Markov Model Development
 	Dynamic Pricing and Optimization
  
-2. High-Level System Architecture
+3. High-Level System Architecture
 The system follows a sequential data processing and optimization architecture.
              CALTECH ACN DATASET
                       |
@@ -63,7 +65,7 @@ The system follows a sequential data processing and optimization architecture.
              Optimal Charging Price
                    (Rs/kWh)
  
-3. Dataset Architecture
+4. Dataset Architecture
 3.1 Primary Dataset: Caltech ACN-Data
 The project uses the Caltech Adaptive Charging Network (ACN) dataset containing historical EV charging session information.
 Important dataset attributes include:
