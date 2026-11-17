@@ -27,39 +27,57 @@ To develop a data-driven EV charging price optimization system that analyzes his
 
 The system follows a sequential data processing and optimization architecture.
 
-```mermaid
-flowchart TD
-    A["Caltech ACN Dataset"] --> B["Phase 1: Data Acquisition"]
-    B --> B1["Raw Data Ingestion"]
-    B1 --> B2["Schema Validation"]
-    B2 --> B3["Data Profiling"]
 
-    B3 --> C["Phase 2: Data Preprocessing"]
-    C --> C1["Timestamp Standardization"]
-    C1 --> C2["Missing Value Handling"]
-    C2 --> C3["Duplicate Removal & Outlier Detection"]
-
-    C3 --> D["Phase 3: Feature Engineering"]
-    D --> D1["Hourly Aggregation"]
-    D1 --> D2["Occupancy & Load Features"]
-    D2 --> D3["Time-Based Features"]
-    D3 --> D4["Feature Normalization"]
-
-    D4 --> E["Phase 4: Hidden Markov Model"]
-    E --> E1["Gaussian HMM Training"]
-    E1 --> E2["Baum-Welch Algorithm"]
-    E2 --> E3["Viterbi Decoding"]
-    E3 --> E4["Operational State Detection"]
-
-    E4 --> F["Phase 5: Price Optimization"]
-    F --> F1["Demand Prediction"]
-    F1 --> F2["Price Elasticity"]
-    F2 --> F3["Grid Penalty Calculation"]
-    F3 --> F4["Constrained Optimization"]
-
-    G["Grid Tariff Configuration"] --> F
-    F4 --> H["Final Output: Optimal Charging Price (₹/kWh)"]
+```text
+                         CALTECH ACN DATASET
+                                  |
+                                  v
+                    PHASE 1: DATA ACQUISITION
+                                  |
+                         Raw Data Ingestion
+                         Schema Validation
+                         Data Profiling
+                                  |
+                                  v
+                   PHASE 2: DATA PREPROCESSING
+                                  |
+                       Timestamp Standardization
+                       Missing Value Handling
+                       Duplicate Removal
+                       Outlier Detection
+                                  |
+                                  v
+                  PHASE 3: FEATURE ENGINEERING
+                                  |
+                         Hourly Aggregation
+                         Occupancy Calculation
+                         Load Features
+                         Time-Based Features
+                         Feature Normalization
+                                  |
+                                  v
+                   PHASE 4: HIDDEN MARKOV MODEL
+                                  |
+                            Gaussian HMM
+                         Baum-Welch Training
+                           Viterbi Decoding
+                      Operational State Detection
+                                  |
+                                  v
+                    PHASE 5: PRICE OPTIMIZATION
+                                  |
+                          Demand Prediction
+                           Price Elasticity
+                        Grid Penalty Calculation
+                       Constrained Optimization
+                                  |
+                                  v
+                            FINAL OUTPUT
+                                  |
+                         Optimal Charging Price
+                              (Rs/kWh)
 ```
+
 
 ---
 
